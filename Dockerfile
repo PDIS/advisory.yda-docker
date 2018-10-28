@@ -1,7 +1,7 @@
 FROM php:7.1-apache
 
 RUN apt-get update && apt-get install -y cron git-core jq vim \
-  libjpeg-dev libpng-dev libpq-dev  unzip && \
+  libjpeg-dev libpng-dev libpq-dev wget unzip && \
   rm -rf /var/lib/apt/lists/* && \
   docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr && \
   docker-php-ext-install gd opcache zip mysqli pdo_mysql
@@ -31,7 +31,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN a2enmod rewrite
 
 RUN git clone https://github.com/JoeyChen-NTUT/advisory.yda.git --depth 1 . && \
-  cp docker-oc-entrypoint /usr/local/bin/ && \
+  wget -O /usr/local/bin/docker-oc-entrypoint https://raw.githubusercontent.com/JoeyChen-NTUT/advisory.yda-docker/master/docker-oc-entrypoint && \
   composer install --no-interaction --prefer-dist --no-scripts && \
   composer clearcache && \
   git status && git reset --hard HEAD && git clean -f -d && \
