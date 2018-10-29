@@ -16,7 +16,7 @@ docker run -d -p 9000:9000 -name portainer --restart always -v /var/run/docker.s
 ```
 mkdir -p /usr/local/yda/nginx
 docker run --name tmp-nginx-container -d nginx
-docker cp -a tmp-nginx-container:/etc/nginx/* /usr/local/yda/nginx/*
+docker cp -a tmp-nginx-container:/etc/nginx/. /usr/local/yda/nginx/
 docker rm -f tmp-nginx-container
 docker network create nginx --attachable
 docker run --name nginx-reverse_proxy --network=nginx -p 80:80 -p 443:443  --restart always -v /usr/local/yda/nginx:/etc/nginx -v /etc/pki/tls/certs/advisory.yda.gov.tw.crt:/etc/pki/tls/certs/advisory.yda.gov.tw.crt -v /etc/pki/tls/private/server2.key:/etc/pki/tls/private/server2.key -d nginx
