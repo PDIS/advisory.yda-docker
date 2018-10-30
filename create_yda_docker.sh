@@ -50,11 +50,21 @@ sleep 15
 echo "run post command"
 docker-compose exec web mkdir -p /var/www/html/storage/app/media
 docker-compose exec web touch -d '1 Jan 2018 00:00' /var/www/html/storage/app/media/gpvip.csv
-docker-compose exec web chown -R www-data:www-data /var/www/html
 docker-compose exec web php artisan october:up
 docker-compose exec web php artisan theme:use responsiv-flat-test
 docker-compose exec web php artisan key:generate
 docker-compose exec web php artisan config:clear
 docker-compose exec web php artisan config:cache
 docker-compose exec web php artisan cache:clear
+docker-compose exec web chown -R www-data:www-data /var/www/html
 docker network connect nginx $YDA_SESSION_NAME-web
+
+docker cp $YDA_SESSION_NAME-web:/var/www/html/.htaccess /tmp/.htaccess
+sed -i "s/# RewriteBase \//RewriteBase \/$YDA_SESSION/g" /tmp/.htaccess
+docker cp /tmp/.htaccess $YDA_SESSION_NAME-web:/var/www/html/.htaccess
+rm -f /tmp/.htaccess
+docker cp $YDA_SESSION_NAME-web:/etc/apache2/sites-available/000-default.conf /tmp/000-default.conf
+sed -i "1a\ \ \ \ \ \ \ \ Alias \"\/$YDA_SESSION\" \"\/var\/www\/html\"" /tmp/000-default.conf
+docker cp /tmp/000-default.conf $YDA_SESSION_NAME-web:/etc/apache2/sites-available/000-default.conf
+rm -f /tmp/000-default.conf
+docker exec $YDA_SESSION_NAME-web service apache2 reload
