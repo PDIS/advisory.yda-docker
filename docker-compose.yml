@@ -6,8 +6,6 @@ services:
     container_name: ${YDA_SESSION_NAME}-web
     depends_on:
       - mysqldb
-    ports:
-      - expose_web_port:80
     volumes:
       - ./storage/app:/var/www/html/storage/app
       - ./storage/logs:/var/www/html/storage/logs
