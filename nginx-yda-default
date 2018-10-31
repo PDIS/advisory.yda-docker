@@ -4,8 +4,8 @@ server {
     listen 443 ssl default_server;
     listen [::]:443 ssl default_server;
 
-    ssl_certificate /etc/pki/tls/certs/advisory.yda.gov.tw.crt;
-    ssl_certificate_key /etc/pki/tls/private/server2.key;
+    ssl_certificate /etc/pki/tls/certs/yda.crt;
+    ssl_certificate_key /etc/pki/tls/private/yda.key;
 
     #charset koi8-r;
     #access_log  /var/log/nginx/host.access.log  main;

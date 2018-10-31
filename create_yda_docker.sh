@@ -5,6 +5,10 @@ export YDA_ROOT=/usr/local/yda
 export YDA_DIR=$YDA_ROOT/session
 export YDA_ALIAS_DIR=$YDA_DIR/$YDA_SESSION_NAME
 export RND_PASS=$(pwgen -s 20)
+export YDA_NGINX_PATH=$YDA_ROOT/nginx
+export YDA_NGINX_CONF_PATH=$YDA_NGINX_PATH/conf.d
+export YDA_NGINX_SESSION_CONF=$YDA_NGINX_CONF_PATH/yda/$YDA_SESSION_NAME.conf
+export RUN_DIR=$(pwd)
 
 if [ $YDA_SESSION == "00" ]; then
     echo "Session Number must greater than 1"
@@ -13,6 +17,11 @@ fi
 
 if [ -d $YDA_ALIAS_DIR ]; then
     echo "docker volume $YDA_ALIAS_DIR exist abort create action"
+    exit 1
+fi
+
+if [ ! -f env.template ]; then
+    echo "env.template file not found. please follow README.md to deploy"
     exit 1
 fi
 
@@ -73,15 +82,12 @@ rm -f /tmp/000-default.conf
 docker exec $YDA_SESSION_NAME-web service apache2 reload
 
 echo "deploy nginx config"
-YDA_NGINX_PATH=$YDA_ROOT/nginx
-YDA_NGINX_CONF_PATH=$YDA_NGINX_PATH/conf.d
-
-
+cd $RUN_DIR
 if [ ! -f $YDA_NGINX_CONF_PATH/yda-default.conf ]; then
     cp nginx-yda-default $YDA_NGINX_CONF_PATH/yda-default.conf
 fi
 mkdir -p $YDA_NGINX_CONF_PATH/yda
-YDA_NGINX_SESSION_CONF=$YDA_NGINX_CONF_PATH/yda/$YDA_SESSION_NAME.conf
 
 cp nginx-yda.template $YDA_NGINX_SESSION_CONF
 sed -i "s/SESSION_NUMBER/$YDA_SESSION/g" $YDA_NGINX_SESSION_CONF
+docker exec nginx-reverse_proxy service nginx reload
