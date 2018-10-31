@@ -2,6 +2,7 @@ server {
     listen       80;
     return 302 https://$host$request_uri;
 }
+
 server {
     listen 443 ssl default_server;
     listen [::]:443 ssl default_server;
@@ -50,7 +51,7 @@ server {
     }
 
     location /current/ {
-        return 302 https://$host/01;
+        return 302 https://$host/01/$1;
     }
 
     include /etc/nginx/conf.d/yda/*.conf;
