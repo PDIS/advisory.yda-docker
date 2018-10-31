@@ -15,7 +15,7 @@ services:
       - DB_HOST=${YDA_SESSION_NAME}-mysql
       - DB_DATABASE=octobercmsdb
       - DB_USERNAME=root
-      - DB_PASSWORD=sql_password
+      - DB_PASSWORD=${SQL_PASSWORD}
 
   mysqldb:
     image: mariadb:5.5
@@ -25,6 +25,6 @@ services:
       - ./sql:/docker-entrypoint-initdb.d
       - ./mysql:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=sql_password
+      - MYSQL_ROOT_PASSWORD=${SQL_PASSWORD}
       - MYSQL_DATABASE=octobercmsdb
       - MYSQL_ROOT_HOST=%
