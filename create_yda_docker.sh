@@ -35,8 +35,6 @@ cp docker-compose.yml $YDA_ALIAS_DIR/docker-compose.yml
 
 cd $YDA_ALIAS_DIR
 echo "adjust compose variable"
-sed -i "s/EXPOSE_WEB_PORT/80$YDA_SESSION/g" docker-compose.yml
-sed -i "s/SQL_PASSWORD/$RND_PASS/g" docker-compose.yml
 sed -i "s/SQL_PASSWORD/$RND_PASS/g" .env
 sed -i "s/^\(APP_KEY=\).*/\1$(pwgen -s 32)/" .env
 
