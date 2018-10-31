@@ -75,12 +75,13 @@ docker exec $YDA_SESSION_NAME-web service apache2 reload
 echo "deploy nginx config"
 YDA_NGINX_PATH=$YDA_ROOT/nginx
 YDA_NGINX_CONF_PATH=$YDA_NGINX_PATH/conf.d
-YDA_NGINX_SESSION_CONF=$YDA_NGINX_CONF_PATH/$YDA_SESSION_NAME.conf
+
 
 if [ ! -f $YDA_NGINX_CONF_PATH/yda-default.conf ]; then
     cp nginx-yda-default $YDA_NGINX_CONF_PATH/yda-default.conf
 fi
 mkdir -p $YDA_NGINX_CONF_PATH/yda
+YDA_NGINX_SESSION_CONF=$YDA_NGINX_CONF_PATH/yda/$YDA_SESSION_NAME.conf
 
 cp nginx-yda.template $YDA_NGINX_SESSION_CONF
 sed -i "s/SESSION_NUMBER/$YDA_SESSION/g" $YDA_NGINX_SESSION_CONF
