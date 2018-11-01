@@ -7,5 +7,7 @@
         proxy_set_header Accept-Encoding "";
 
         sub_filter_once off;
+	sub_filter types application/json;
         sub_filter "http://$host" "https://$host";
+        sub_filter 'http:\/\/' 'https:\/\/';
     }
