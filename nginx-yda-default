@@ -1,11 +1,20 @@
 server {
     listen       80;
-    server_name  localhost;
+    return 302 https://$host$request_uri;
+}
+
+server {
     listen 443 ssl default_server;
     listen [::]:443 ssl default_server;
 
     ssl_certificate /etc/pki/tls/certs/yda.crt;
     ssl_certificate_key /etc/pki/tls/private/yda.key;
+    
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+
 
     #charset koi8-r;
     #access_log  /var/log/nginx/host.access.log  main;
@@ -48,7 +57,7 @@ server {
     }
 
     location /current/ {
-        return 302 https://$host/01;
+        return 302 https://$host/01/$1;
     }
 
     include /etc/nginx/conf.d/yda/*.conf;
