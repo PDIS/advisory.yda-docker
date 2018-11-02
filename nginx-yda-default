@@ -53,11 +53,11 @@ server {
     #}
 
     location / {
-        return 302 https://$host/current$request_uri;
+        return 302 https://$host/current/;
     }
 
     location /current/ {
-        return 302 https://$host/02$request_uri;
+        return 302 https://$host/02/;
     }
 
     location ~ ^/(blog|userpost|proposal)/(.*)$ {
