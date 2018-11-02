@@ -12,6 +12,18 @@ mkdir -p /usr/local/yda/portainer
 docker run -d -p 9000:9000 -name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v /usr/local/yda/portainer:/data portainer/portainer
 ```
 
+##憑證作業
+如果有已簽屬好的憑證請依序放置在下列目錄
+ - 請先將憑證、中繼憑證及根憑證依序合併為yda.crt，並將憑證檔請放置到/etc/pki/tls/certs/目錄下
+ - 請將憑證私鑰命名為yda.key，並將私鑰檔放置到/etc/pki/tls/private/目錄下
+
+若前端有SSL offload設備則可依下列方式建立並佈署自簽憑證
+```
+openssl req -newkey -nodes -keyout /etc/pki/tls/private/yda.key -x509 -days 3650 -out /etc/pki/tls/certs/yda.crt -config openssl-yda.cnf
+openssl req -nodes -newkey rsa:2048 -keyout  /etc/pki/tls/private/yda.key -x509 -days 3650 -out /etc/pki/tls/certs/yda.crt -subj "/C=TW/ST=YDA State/L=YDA LOCAL/O=YDA/OU=YDA Web/CN=selfsign.yda.local"
+```
+
+
 ## 安裝Nginx reverse proxy
 ```
 mkdir -p /usr/local/yda/nginx
@@ -19,7 +31,7 @@ docker run --name tmp-nginx-container -d nginx
 docker cp -a tmp-nginx-container:/etc/nginx/. /usr/local/yda/nginx/
 docker rm -f tmp-nginx-container
 docker network create nginx --attachable
-docker run --name nginx-reverse_proxy --network=nginx -p 80:80 -p 443:443  --restart always -v /usr/local/yda/nginx:/etc/nginx -v /etc/pki/tls/certs/advisory.yda.gov.tw.crt:/etc/pki/tls/certs/advisory.yda.gov.tw.crt -v /etc/pki/tls/private/server2.key:/etc/pki/tls/private/server2.key -d nginx
+docker run --name nginx-reverse_proxy --network=nginx -p 80:80 -p 443:443  --restart always -v /usr/local/yda/nginx:/etc/nginx -v /etc/pki/tls/certs/yda.crt:/etc/pki/tls/certs/yda.crt -v /etc/pki/tls/private/yda.key:/etc/pki/tls/private/yda.key -d nginx
 ```
 
 
