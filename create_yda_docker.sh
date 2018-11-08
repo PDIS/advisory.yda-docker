@@ -65,7 +65,7 @@ docker-compose exec web php artisan key:generate
 docker-compose exec web php artisan config:clear
 docker-compose exec web php artisan config:cache
 docker-compose exec web php artisan cache:clear
-docker-compose exec web chown -R www-data:www-data /var/www/html
+docker-compose exec web chown -R www-data:www-data /var/www/html/storage
 
 echo "add web to nginx network"
 docker network connect nginx $YDA_SESSION_NAME-web
