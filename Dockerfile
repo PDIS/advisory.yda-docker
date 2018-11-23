@@ -30,8 +30,8 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN a2enmod rewrite
 
-RUN git clone https://github.com/JoeyChen-NTUT/advisory.yda.git --depth 1 . && \
-  wget -O /usr/local/bin/docker-oc-entrypoint https://raw.githubusercontent.com/JoeyChen-NTUT/advisory.yda-docker/master/docker-oc-entrypoint && \
+RUN git clone https://github.com/PDIS/advisory.yda.git --depth 1 . && \
+  wget -O /usr/local/bin/docker-oc-entrypoint https://raw.githubusercontent.com/PDIS/advisory.yda-docker/master/docker-oc-entrypoint && \
   composer install --no-interaction --prefer-dist --no-scripts && \
   composer clearcache && \
   git status && git reset --hard HEAD && git clean -f -d && \
